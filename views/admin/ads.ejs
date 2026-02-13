@@ -1,0 +1,126 @@
+<div class="page-header">
+    <h1 class="page-title">Gerenciar Anúncios</h1>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+    <!-- Form -->
+    <div class="table-card" style="padding: 1.5rem; height: fit-content;">
+        <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">Novo Anúncio</h3>
+        <form action="/admin/ads" method="POST" enctype="multipart/form-data">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Título</label>
+                <input type="text" name="title" required
+                    style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Link de Destino</label>
+                <input type="text" name="link" required value="#"
+                    style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem;">Posição</label>
+                    <select name="position"
+                        style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                        <option value="sidebar">Sidebar</option>
+                        <option value="header">Header</option>
+                        <option value="content">Conteúdo</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 0.5rem;">Label</label>
+                    <input type="text" name="label" value="PUBLICIDADE"
+                        style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Tipo</label>
+                <select name="type" onchange="toggleAdType(this.value)"
+                    style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    <option value="text">Texto + Ícone</option>
+                    <option value="image">Imagem</option>
+                </select>
+            </div>
+
+            <div id="textFields">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Conteúdo/Descrição</label>
+                    <textarea name="content" rows="2"
+                        style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;"></textarea>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Ícone (FontAwesome class)</label>
+                    <input type="text" name="icon" value="fas fa-bullhorn"
+                        style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                </div>
+            </div>
+
+            <div id="imageFields" style="display: none; margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Imagem do Banner</label>
+                <input type="file" name="image" accept="image/*"
+                    style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fas fa-plus"></i> Adicionar
+            </button>
+        </form>
+    </div>
+
+    <!-- List -->
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Anúncio</th>
+                    <th>Posição</th>
+                    <th>Tipo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% ads.forEach(ad=> { %>
+                    <tr>
+                        <td>
+                            <strong>
+                                <%= ad.title %>
+                            </strong><br>
+                            <small style="color: #64748b;">
+                                <%= ad.label %>
+                            </small>
+                        </td>
+                        <td><span class="status-badge status-draft">
+                                <%= ad.position %>
+                            </span></td>
+                        <td>
+                            <%= ad.type==='image' ? 'Imagem' : 'Texto' %>
+                        </td>
+                        <td>
+                            <a href="/admin/ads/<%= ad.id %>/delete" class="action-btn delete"
+                                onclick="return confirm('Tem certeza?')" title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function toggleAdType(type) {
+        const textFields = document.getElementById('textFields');
+        const imageFields = document.getElementById('imageFields');
+        if (type === 'image') {
+            textFields.style.display = 'none';
+            imageFields.style.display = 'block';
+        } else {
+            textFields.style.display = 'block';
+            imageFields.style.display = 'none';
+        }
+    }
+</script>

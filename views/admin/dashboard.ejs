@@ -1,0 +1,107 @@
+<div class="page-header">
+    <h1 class="page-title">Dashboard</h1>
+    <a href="/" target="_blank" class="btn btn-primary">
+        <i class="fas fa-external-link-alt"></i> Ver Site
+    </a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="stat-info">
+            <h3>
+                <%= articleCount %>
+            </h3>
+            <p>Notícias Publicadas</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-eye"></i>
+        </div>
+        <div class="stat-info">
+            <h3>
+                <%= totalViews %>
+            </h3>
+            <p>Visualizações Totais</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-tags"></i>
+        </div>
+        <div class="stat-info">
+            <h3>
+                <%= categoryCount %>
+            </h3>
+            <p>Categorias</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">
+            <i class="fas fa-ad"></i>
+        </div>
+        <div class="stat-info">
+            <h3>
+                <%= adCount %>
+            </h3>
+            <p>Anúncios Ativos</p>
+        </div>
+    </div>
+</div>
+
+<div class="page-header" style="margin-top: 2rem;">
+    <h2 class="page-title" style="font-size: 1.4rem;">Notícias Recentes</h2>
+    <a href="/admin/articles/new" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nova Notícia
+    </a>
+</div>
+
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Data</th>
+                <th>Visualizações</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% articles.forEach(article=> { %>
+                <tr>
+                    <td>
+                        <%= article.title %>
+                    </td>
+                    <td>
+                        <% if (article.Category) { %>
+                            <span class="status-badge status-active">
+                                <%= article.Category.name %>
+                            </span>
+                            <% } else { %>
+                                <span class="status-badge status-draft">Sem categoria</span>
+                                <% } %>
+                    </td>
+                    <td>
+                        <%= formatDateDay(article.createdAt) %>/<%= formatDateMonth(article.createdAt) %>
+                    </td>
+                    <td>
+                        <%= article.views %>
+                    </td>
+                    <td>
+                        <a href="/admin/articles/<%= article.id %>/edit" class="action-btn" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="/article/<%= article.slug %>" target="_blank" class="action-btn" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <!-- Add delete form/link here -->
+                    </td>
+                </tr>
+                <% }); %>
+        </tbody>
+    </table>
+</div>

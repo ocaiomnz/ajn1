@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Notícias - Aracaju</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <!-- Header com Anúncio -->
+    <div class="header-ad">
+        <div class="container">
+            <div class="header-ad-content">
+                <i class="fas fa-bullhorn"></i>
+                <span>Espaço publicitário disponível - <a href="#">Anuncie no AJN1</a> e alcance milhares de leitores
+                    diariamente</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-newspaper"></i>
+                    AJN1
+                </div>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <nav class="nav-menu" id="navMenu">
+                    <a href="/" class="nav-link">Início</a>
+                    <% if (typeof categories !=='undefined' && categories.length> 0) { %>
+                        <% categories.forEach(category=> { %>
+                            <a href="/category/<%= category.slug %>" class="nav-link">
+                                <%= category.name %>
+                            </a>
+                            <% }); %>
+                                <% } %>
+                                    <a href="/videos" class="nav-link">Vídeos</a>
+                                    <a href="#" class="nav-link">Classificados</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <%- body %>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>AJN1</h3>
+                        <p>O portal de notícias mais completo da capital sergipana, trazendo informações atualizadas
+                            sobre política, esportes, tecnologia e cultura.</p>
+                    </div>
+
+                    <div class="footer-section">
+                        <h3>Categorias</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Política</a></li>
+                            <li><a href="#">Esportes</a></li>
+                            <li><a href="#">Tecnologia</a></li>
+                            <li><a href="#">Cultura</a></li>
+                            <li><a href="#">Vídeos</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h3>Contato</h3>
+                        <ul class="footer-links">
+                            <li><a href="#">Redação</a></li>
+                            <li><a href="#">Anuncie</a></li>
+                            <li><a href="#">Trabalhe conosco</a></li>
+                            <li><a href="https://ajn1.com.br/classificados" target="_blank">Classificados</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="copyright">
+                    <p>&copy; 2026 AJN1. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Video Modal (Global) -->
+        <div class="video-modal" id="videoModal">
+            <div class="modal-content">
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h3 id="modalTitle">Assistir Vídeo</h3>
+                <div class="video-container" id="videoContainer">
+                    <!-- YouTube iframe will be inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Mobile Menu Toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    mobileMenuBtn.innerHTML = navMenu.classList.contains('active')
+                        ? '<i class="fas fa-times"></i>'
+                        : '<i class="fas fa-bars"></i>';
+                });
+            }
+
+            // Modal de Vídeo
+            const videoModal = document.getElementById('videoModal');
+            const closeModal = document.getElementById('closeModal');
+            const videoContainer = document.getElementById('videoContainer');
+            const modalTitle = document.getElementById('modalTitle');
+            const videoThumbnails = document.querySelectorAll('.video-thumbnail');
+
+            // Títulos dos vídeos para o modal (Placeholder for dynamic data)
+            const videoTitles = {
+                'dQw4w9WgXcQ': 'Entrevista exclusiva com a prefeita de Aracaju sobre os planos para 2026',
+                '9bZkp7q19f0': 'Melhores momentos: The Strongest 2 x 1 Deportivo Táchira - Libertadores',
+                'L_jWHffIx5E': 'Como as deepfakes podem afetar as eleições? Especialista explica'
+            };
+
+            // Abrir modal ao clicar em um thumbnail de vídeo
+            videoThumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => {
+                    const videoId = thumbnail.getAttribute('data-video-id');
+                    const videoTitle = videoTitles[videoId] || 'Assistir Vídeo';
+
+                    // Configurar título no modal
+                    if (modalTitle) modalTitle.textContent = videoTitle;
+
+                    // Configurar iframe do YouTube
+                    if (videoContainer) {
+                        videoContainer.innerHTML = `
+                        <iframe 
+                            src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" 
+                            title="${videoTitle}" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    `;
+                    }
+
+                    // Mostrar modal
+                    if (videoModal) {
+                        videoModal.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+
+            // Fechar modal
+            if (closeModal) {
+                closeModal.addEventListener('click', () => {
+                    if (videoModal) videoModal.classList.remove('active');
+                    if (videoContainer) videoContainer.innerHTML = '';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            // Fechar modal ao clicar fora
+            if (videoModal) {
+                videoModal.addEventListener('click', (e) => {
+                    if (e.target === videoModal) {
+                        videoModal.classList.remove('active');
+                        if (videoContainer) videoContainer.innerHTML = '';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+
+            // Add animation to elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should animate on scroll
+            document.querySelectorAll('.main-article, .latest-news, .ad-card, .video-card, .featured-card').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Initialize with some elements already animated
+            document.addEventListener('DOMContentLoaded', () => {
+                document.querySelectorAll('.main-article, .latest-news').forEach(el => {
+                    el.classList.add('animated');
+                });
+            });
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<div class="page-header">
+    <h1 class="page-title">
+        <%= article.id ? 'Editar Notícia' : 'Nova Notícia' %>
+    </h1>
+    <a href="/admin/dashboard" class="btn" style="background-color: #cbd5e1; color: #334155;">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </a>
+</div>
+
+<div class="table-card" style="padding: 2rem;">
+    <form action="<%= action %>" method="POST" enctype="multipart/form-data">
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Título</label>
+            <input type="text" name="title" value="<%= article.title || '' %>" required
+                style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Categoria</label>
+                <select name="categoryId" required
+                    style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    <option value="">Selecione...</option>
+                    <% categories.forEach(cat=> { %>
+                        <option value="<%= cat.id %>" <%=article.categoryId===cat.id ? 'selected' : '' %>>
+                            <%= cat.name %>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Imagem de Capa</label>
+                <input type="file" name="image" accept="image/*"
+                    style="width: 100%; padding: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                <% if (article.image) { %>
+                    <div style="margin-top: 5px; font-size: 0.8rem; color: #64748b;">
+                        Imagem atual: <a href="<%= article.image %>" target="_blank">Ver imagem</a>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Resumo (Excerpt)</label>
+            <textarea name="excerpt" rows="3" required
+                style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px;"><%= article.excerpt || '' %></textarea>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Conteúdo</label>
+            <!-- Simple textarea for now, could be WYSIWYG later -->
+            <textarea name="content" rows="15" required
+                style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px; font-family: monospace;"><%= article.content || '' %></textarea>
+            <small style="color: #64748b;">Aceita HTML básico</small>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <label style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" name="featured" <%=article.featured ? 'checked' : '' %>>
+                <span style="font-weight: 500;">Destaque Principal?</span>
+            </label>
+        </div>
+
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Salvar Notícia
+            </button>
+        </div>
+    </form>
+</div>

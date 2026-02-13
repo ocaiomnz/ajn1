@@ -1,0 +1,51 @@
+<div class="page-header">
+    <h1 class="page-title">Gerenciar Categorias</h1>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+    <!-- Form -->
+    <div class="table-card" style="padding: 1.5rem; height: fit-content;">
+        <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">Nova Categoria</h3>
+        <form action="/admin/categories" method="POST">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Nome</label>
+                <input type="text" name="name" required
+                    style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fas fa-plus"></i> Adicionar
+            </button>
+        </form>
+    </div>
+
+    <!-- List -->
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Slug</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% categories.forEach(cat=> { %>
+                    <tr>
+                        <td>
+                            <%= cat.name %>
+                        </td>
+                        <td>
+                            <%= cat.slug %>
+                        </td>
+                        <td>
+                            <a href="/admin/categories/<%= cat.id %>/delete" class="action-btn delete"
+                                onclick="return confirm('Tem certeza?')" title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>

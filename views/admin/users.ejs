@@ -1,0 +1,79 @@
+<div class="page-header">
+    <h1 class="page-title">Gerenciar Usuários</h1>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+    <!-- Form -->
+    <div class="table-card" style="padding: 1.5rem; height: fit-content;">
+        <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">Novo Usuário</h3>
+        <form action="/admin/users" method="POST">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Usuário</label>
+                <input type="text" name="username" required
+                    style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Senha</label>
+                <input type="password" name="password" required
+                    style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; margin-bottom: 0.5rem;">Função</label>
+                <select name="role" required
+                    style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                    <option value="writer">Escritor (Apenas escreve)</option>
+                    <option value="coordinator">Coordenador (Escreve e Anúncios)</option>
+                    <option value="admin">Administrador (Total)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                <i class="fas fa-plus"></i> Adicionar
+            </button>
+        </form>
+    </div>
+
+    <!-- List -->
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Função</th>
+                    <th>Criado em</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(u=> { %>
+                    <tr>
+                        <td>
+                            <%= u.username %>
+                        </td>
+                        <td>
+                            <% if (u.role==='admin' ) { %>
+                                <span class="status-badge"
+                                    style="background-color: #fee2e2; color: #991b1b;">Admin</span>
+                                <% } else if (u.role==='coordinator' ) { %>
+                                    <span class="status-badge"
+                                        style="background-color: #fef3c7; color: #92400e;">Coordenador</span>
+                                    <% } else { %>
+                                        <span class="status-badge status-active">Escritor</span>
+                                        <% } %>
+                        </td>
+                        <td>
+                            <%= formatDateDay(u.createdAt) %>/<%= formatDateMonth(u.createdAt) %>
+                        </td>
+                        <td>
+                            <% if (u.username !=='admin' ) { %>
+                                <a href="/admin/users/<%= u.id %>/delete" class="action-btn delete"
+                                    onclick="return confirm('Tem certeza?')" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <% } %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
