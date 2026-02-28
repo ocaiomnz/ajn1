@@ -1,39 +1,35 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
 
-const Ad = sequelize.define('Ad', {
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    image: {
-        type: DataTypes.STRING,
-        allowNull: true // If null, use icon/text
-    },
-    content: {
-        type: DataTypes.TEXT,
-        allowNull: true // For text-based ads
-    },
-    link: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    position: {
-        type: DataTypes.ENUM('header', 'sidebar', 'content'),
-        defaultValue: 'sidebar'
-    },
-    type: {
-        type: DataTypes.ENUM('image', 'text'),
-        defaultValue: 'text'
-    },
-    icon: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    label: {
-        type: DataTypes.STRING,
-        defaultValue: 'PUBLICIDADE'
-    }
-});
+module.exports = (sequelize) => {
+    const Ad = sequelize.define('Ad', {
+        title: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        content: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
+        image: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        url: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        position: {
+            type: DataTypes.ENUM('header', 'sidebar', 'footer', 'middle'),
+            defaultValue: 'sidebar'
+        },
+        active: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
+        }
+    }, {
+        tableName: 'ads',
+        timestamps: true
+    });
 
-module.exports = Ad;
+    return Ad;
+};

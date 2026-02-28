@@ -1,0 +1,65 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1>Colunistas</h1>
+            <p class="text-muted">Opiniões e análises dos nossos colaboradores</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <% if (columnists.length === 0) { %>
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Nenhum colunista encontrado.
+                </div>
+            </div>
+        <% } else { %>
+            <% columnists.forEach(columnist => { %>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <% if (columnist.photo) { %>
+                                <img src="<%= columnist.photo %>" class="rounded-circle mb-3" 
+                                     style="width: 120px; height: 120px; object-fit: cover;" 
+                                     alt="<%= columnist.name %>">
+                            <% } else { %>
+                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                     style="width: 120px; height: 120px;">
+                                    <i class="fas fa-user fa-3x text-muted"></i>
+                                </div>
+                            <% } %>
+                            
+                            <h5 class="card-title"><%= columnist.name %></h5>
+                            <p class="card-text text-muted">
+                                <%= columnist.bio ? columnist.bio.substring(0, 100) + '...' : 'Colunista do AJN1' %>
+                            </p>
+                            
+                            <div class="mb-3">
+                                <% if (columnist.socialMedia && Object.keys(columnist.socialMedia).length > 0) { %>
+                                    <% Object.entries(columnist.socialMedia).forEach(([platform, url]) => { %>
+                                        <% if (url) { %>
+                                            <a href="<%= url %>" target="_blank" class="btn btn-outline-primary btn-sm me-1">
+                                                <i class="fab fa-<%= platform %>"></i>
+                                            </a>
+                                        <% } %>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <a href="/colunistas/<%= columnist.slug %>" class="btn btn-primary">
+                                    Ver Artigos
+                                    <% if (columnist.articles && columnist.articles.length > 0) { %>
+                                        <span class="badge bg-light text-dark ms-2">
+                                            <%= columnist.articles.length %>
+                                        </span>
+                                    <% } %>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+</div>

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
 const fs = require('fs');
-const { Article, Category, Ad, User } = require('./models');
+const { Article, Category, Ad, User, Classified, Columnist, LegalPublication } = require('./models');
 const { Op } = require('sequelize');
 
 const app = express();
@@ -588,6 +588,18 @@ app.get('/admin/users/:id/delete', authenticate, authorize(['admin']), async (re
 app.get('/admin', (req, res) => {
     res.redirect('/admin/dashboard');
 });
+
+// Classificados Routes
+const classifiedsRouter = require('./routes/classifieds');
+app.use('/classificados', classifiedsRouter);
+
+// Colunistas Routes
+const columnistsRouter = require('./routes/columnists');
+app.use('/colunistas', columnistsRouter);
+
+// Publicação Legal Routes
+const legalPublicationsRouter = require('./routes/legal-publications');
+app.use('/publicacao-legal', legalPublicationsRouter);
 
 // Start Server
 app.listen(port, () => {

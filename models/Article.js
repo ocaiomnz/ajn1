@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+
+module.exports = (sequelize) => {
 
 const Article = sequelize.define('Article', {
     title: {
@@ -30,7 +31,16 @@ const Article = sequelize.define('Article', {
     featured: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    columnistId: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    isColumn: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 });
 
-module.exports = Article;
+return Article;
+};

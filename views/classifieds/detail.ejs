@@ -1,0 +1,125 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary fs-6"><%= classified.category %></span>
+                        <% if (classified.featured) { %>
+                            <span class="badge bg-warning">Destaque</span>
+                        <% } %>
+                    </div>
+                </div>
+                
+                <!-- Carousel de Imagens -->
+                <% if (classified.images && classified.images.length > 0) { %>
+                    <div id="classifiedCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <% classified.images.forEach((image, index) => { %>
+                                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                    <img src="<%= image %>" class="d-block w-100" style="height: 400px; object-fit: cover;" alt="<%= classified.title %>">
+                                </div>
+                            <% }) %>
+                        </div>
+                        <% if (classified.images.length > 1) { %>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#classifiedCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#classifiedCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
+                        <% } %>
+                    </div>
+                <% } else { %>
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-image fa-5x text-muted"></i>
+                    </div>
+                <% } %>
+
+                <div class="card-body">
+                    <h1 class="card-title mb-3"><%= classified.title %></h1>
+                    
+                    <% if (classified.price) { %>
+                        <h2 class="text-success mb-3">R$ <%= parseFloat(classified.price).toFixed(2) %></h2>
+                    <% } %>
+                    
+                    <div class="mb-4">
+                        <h5>Descrição</h5>
+                        <p class="card-text"><%= classified.description.replace(/\n/g, '<br>') %></p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Informações de Contato</h5>
+                            <p><strong>Nome:</strong> <%= classified.contactName %></p>
+                            <p><strong>Telefone:</strong> <%= classified.contactPhone %></p>
+                            <% if (classified.contactEmail) { %>
+                                <p><strong>E-mail:</strong> <%= classified.contactEmail %></p>
+                            <% } %>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Informações do Anúncio</h5>
+                            <p><strong>Publicado em:</strong> <%= moment(classified.createdAt).format('DD/MM/YYYY [às] HH:mm') %></p>
+                            <p><strong>Expira em:</strong> <%= moment(classified.expiresAt).format('DD/MM/YYYY') %></p>
+                            <p><strong>Status:</strong> 
+                                <span class="badge bg-<%= classified.status === 'active' ? 'success' : 'secondary' %>">
+                                    <%= classified.status === 'active' ? 'Ativo' : 'Inativo' %>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Anúncios na Sidebar -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Publicidade</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="bg-light p-4">
+                        <i class="fas fa-ad fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Espaço publicitário</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ações</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" onclick="window.print()">
+                            <i class="fas fa-print"></i> Imprimir Anúncio
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="shareAnuncio()">
+                            <i class="fas fa-share"></i> Compartilhar
+                        </button>
+                        <a href="/classificados" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Ver Mais Anúncios
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function shareAnuncio() {
+    if (navigator.share) {
+        navigator.share({
+            title: '<%= classified.title %>',
+            text: '<%= classified.description.substring(0, 100) %>...',
+            url: window.location.href
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copiado para a área de transferência!');
+    }
+}
+</script>

@@ -1,0 +1,81 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1>Classificados</h1>
+            <p class="text-muted">Anúncios da comunidade</p>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form method="GET" class="d-flex">
+                <select name="category" class="form-select me-2">
+                    <option value="todos" <%= currentCategory === 'todos' ? 'selected' : '' %>>Todas Categorias</option>
+                    <% categories.forEach(cat => { %>
+                        <option value="<%= cat %>" <%= currentCategory === cat ? 'selected' : '' %>><%= cat %></option>
+                    <% }) %>
+                </select>
+                <input type="text" name="search" class="form-control me-2" placeholder="Buscar..." value="<%= search %>">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="/classificados/novo" class="btn btn-success">
+                <i class="fas fa-plus"></i> Novo Anúncio
+            </a>
+        </div>
+    </div>
+
+    <!-- Lista de Classificados -->
+    <div class="row">
+        <% if (classifieds.length === 0) { %>
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Nenhum classificado encontrado.
+                </div>
+            </div>
+        <% } else { %>
+            <% classifieds.forEach(classified => { %>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <% if (classified.images && classified.images.length > 0) { %>
+                            <img src="<%= classified.images[0] %>" class="card-img-top" style="height: 200px; object-fit: cover;" alt="<%= classified.title %>">
+                        <% } else { %>
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        <% } %>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-primary"><%= classified.category %></span>
+                                <% if (classified.featured) { %>
+                                    <span class="badge bg-warning">Destaque</span>
+                                <% } %>
+                            </div>
+                            
+                            <h5 class="card-title"><%= classified.title %></h5>
+                            <p class="card-text text-muted flex-grow-1">
+                                <%= classified.description.substring(0, 100) %>...
+                            </p>
+                            
+                            <% if (classified.price) { %>
+                                <h4 class="text-success mb-2">R$ <%= parseFloat(classified.price).toFixed(2) %></h4>
+                            <% } %>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <%= moment(classified.createdAt).format('DD/MM/YYYY') %>
+                                </small>
+                                <a href="/classificados/<%= classified.id %>" class="btn btn-outline-primary btn-sm">
+                                    Ver Detalhes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+</div>

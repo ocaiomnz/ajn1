@@ -1,0 +1,99 @@
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3><%= columnist ? 'Editar Colunista' : 'Novo Colunista' %></h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="<%= action %>" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="name" class="form-label">Nome *</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="<%= columnist ? columnist.name : '' %>" required>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="category" class="form-label">Categoria *</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="opiniao" <%= columnist && columnist.category === 'opiniao' ? 'selected' : '' %>>Opinião</option>
+                                    <option value="politica" <%= columnist && columnist.category === 'politica' ? 'selected' : '' %>>Política</option>
+                                    <option value="economia" <%= columnist && columnist.category === 'economia' ? 'selected' : '' %>>Economia</option>
+                                    <option value="cultura" <%= columnist && columnist.category === 'cultura' ? 'selected' : '' %>>Cultura</option>
+                                    <option value="esportes" <%= columnist && columnist.category === 'esportes' ? 'selected' : '' %>>Esportes</option>
+                                    <option value="tecnologia" <%= columnist && columnist.category === 'tecnologia' ? 'selected' : '' %>>Tecnologia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Biografia</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3"><%= columnist ? columnist.bio || '' : '' %></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="email" name="email" 
+                                       value="<%= columnist ? columnist.email || '' : '' %>">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="photo" class="form-label">Foto</label>
+                                <input type="file" class="form-control" id="photo" name="photo" accept="image/jpeg,image/jpg,image/png">
+                                <div class="form-text">Formatos aceitos: JPG, PNG. Tamanho recomendado: 150x150px.</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h6>Redes Sociais</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label for="twitter" class="form-label">Twitter</label>
+                                    <input type="url" class="form-control" id="twitter" name="socialMedia[twitter]" 
+                                           value="<%= columnist && columnist.socialMedia ? columnist.socialMedia.twitter || '' : '' %>">
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="facebook" class="form-label">Facebook</label>
+                                    <input type="url" class="form-control" id="facebook" name="socialMedia[facebook]" 
+                                           value="<%= columnist && columnist.socialMedia ? columnist.socialMedia.facebook || '' : '' %>">
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="instagram" class="form-label">Instagram</label>
+                                    <input type="url" class="form-control" id="instagram" name="socialMedia[instagram]" 
+                                           value="<%= columnist && columnist.socialMedia ? columnist.socialMedia.instagram || '' : '' %>">
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="linkedin" class="form-label">LinkedIn</label>
+                                    <input type="url" class="form-control" id="linkedin" name="socialMedia[linkedin]" 
+                                           value="<%= columnist && columnist.socialMedia ? columnist.socialMedia.linkedin || '' : '' %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="active" name="active" 
+                                       <%= columnist && columnist.active ? 'checked' : 'checked' %>>
+                                <label class="form-check-label" for="active">
+                                    Colunista ativo
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="/colunistas" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Voltar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> <%= columnist ? 'Atualizar' : 'Criar' %> Colunista
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

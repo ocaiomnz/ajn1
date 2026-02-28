@@ -1,0 +1,119 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1>Publicação Legal</h1>
+            <p class="text-muted">Edital, licitações, avisos e documentos oficiais</p>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form method="GET" class="d-flex gap-2">
+                <select name="type" class="form-select">
+                    <option value="todos" <%= currentType === 'todos' ? 'selected' : '' %>>Todos os tipos</option>
+                    <option value="edital" <%= currentType === 'edital' ? 'selected' : '' %>>Edital</option>
+                    <option value="licitacao" <%= currentType === 'licitacao' ? 'selected' : '' %>>Licitação</option>
+                    <option value="aviso" <%= currentType === 'aviso' ? 'selected' : '' %>>Aviso</option>
+                    <option value="declaracao" <%= currentType === 'declaracao' ? 'selected' : '' %>>Declaração</option>
+                    <option value="outro" <%= currentType === 'outro' ? 'selected' : '' %>>Outro</option>
+                </select>
+                <input type="text" name="search" class="form-control" placeholder="Buscar..." value="<%= search %>">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <small class="text-muted">
+                <%= totalItems %> publicações encontradas
+            </small>
+        </div>
+    </div>
+
+    <!-- Lista de Publicações -->
+    <div class="row">
+        <% if (publications.length === 0) { %>
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Nenhuma publicação legal encontrada.
+                </div>
+            </div>
+        <% } else { %>
+            <% publications.forEach(publication => { %>
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-primary me-2">
+                                            <%= publication.type.charAt(0).toUpperCase() + publication.type.slice(1) %>
+                                        </span>
+                                        <span class="text-muted">
+                                            <%= moment(publication.publicationDate).format('DD/MM/YYYY') %>
+                                        </span>
+                                        <% if (publication.validityDate) { %>
+                                            <span class="text-muted ms-3">
+                                                Válido até: <%= moment(publication.validityDate).format('DD/MM/YYYY') %>
+                                            </span>
+                                        <% } %>
+                                    </div>
+                                    <h5 class="card-title">
+                                        <a href="/publicacao-legal/<%= publication.id %>" class="text-decoration-none">
+                                            <%= publication.title %>
+                                        </a>
+                                    </h5>
+                                    <p class="card-text text-muted mb-2">
+                                        <strong>Entidade:</strong> <%= publication.entity %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= publication.content.substring(0, 200) %>...
+                                    </p>
+                                    <% if (publication.documentNumber) { %>
+                                        <small class="text-muted">
+                                            <strong>Nº do documento:</strong> <%= publication.documentNumber %>
+                                        </small>
+                                    <% } %>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <a href="/publicacao-legal/<%= publication.id %>" class="btn btn-outline-primary">
+                                        Ver Detalhes
+                                    </a>
+                                    <% if (publication.pdfUrl) { %>
+                                        <a href="<%= publication.pdfUrl %>" target="_blank" class="btn btn-outline-secondary ms-2">
+                                            <i class="fas fa-file-pdf"></i> PDF
+                                        </a>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+
+    <!-- Paginação -->
+    <% if (totalPages > 1) { %>
+        <nav aria-label="Paginação">
+            <ul class="pagination justify-content-center">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage - 1 %>&type=<%= currentType %>&search=<%= search %>">Anterior</a>
+                    </li>
+                <% } %>
+                
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>&type=<%= currentType %>&search=<%= search %>"><%= i %></a>
+                    </li>
+                <% } %>
+                
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= currentPage + 1 %>&type=<%= currentType %>&search=<%= search %>">Próxima</a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+    <% } %>
+</div>

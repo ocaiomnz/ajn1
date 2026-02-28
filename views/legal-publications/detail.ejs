@@ -1,0 +1,131 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Início</a></li>
+                    <li class="breadcrumb-item"><a href="/publicacao-legal">Publicação Legal</a></li>
+                    <li class="breadcrumb-item active"><%= publication.title %></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3><%= publication.title %></h3>
+                        <span class="badge bg-primary">
+                            <%= publication.type.charAt(0).toUpperCase() + publication.type.slice(1) %>
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Entidade:</strong> <%= publication.entity %></p>
+                            <p><strong>Data de Publicação:</strong> <%= moment(publication.publicationDate).format('DD/MM/YYYY') %></p>
+                            <% if (publication.validityDate) { %>
+                                <p><strong>Data de Validade:</strong> <%= moment(publication.validityDate).format('DD/MM/YYYY') %></p>
+                            <% } %>
+                        </div>
+                        <div class="col-md-6">
+                            <% if (publication.documentNumber) { %>
+                                <p><strong>Nº do Documento:</strong> <%= publication.documentNumber %></p>
+                            <% } %>
+                            <p><strong>Status:</strong> 
+                                <span class="badge bg-<%= publication.status === 'active' ? 'success' : 'secondary' %>">
+                                    <%= publication.status === 'active' ? 'Ativo' : 'Inativo' %>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Conteúdo</h5>
+                        <div class="content-text">
+                            <%= publication.content.replace(/\n/g, '<br>') %>
+                        </div>
+                    </div>
+
+                    <% if (publication.contactInfo) { %>
+                        <div class="mb-4">
+                            <h5>Informações de Contato</h5>
+                            <p><%= publication.contactInfo.replace(/\n/g, '<br>') %></p>
+                        </div>
+                    <% } %>
+
+                    <% if (publication.pdfUrl) { %>
+                        <div class="text-center">
+                            <a href="<%= publication.pdfUrl %>" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-file-pdf"></i> Abrir PDF
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="card-footer text-muted">
+                    <small>
+                        Publicado em <%= moment(publication.createdAt).format('DD/MM/YYYY [às] HH:mm') %>
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Anúncios -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>Publicidade</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="bg-light p-4">
+                        <i class="fas fa-ad fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Espaço publicitário</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informações Adicionais -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Informações</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Tipo:</strong> <%= publication.type.charAt(0).toUpperCase() + publication.type.slice(1) %></p>
+                    <p><strong>Entidade:</strong> <%= publication.entity %></p>
+                    <% if (publication.validityDate) { %>
+                        <p><strong>Validade:</strong> 
+                            <% const daysLeft = moment(publication.validityDate).diff(moment(), 'days'); %>
+                            <% if (daysLeft > 0) { %>
+                                <span class="text-success"><%= daysLeft %> dias restantes</span>
+                            <% } else if (daysLeft === 0) { %>
+                                <span class="text-warning">Expira hoje</span>
+                            <% } else { %>
+                                <span class="text-danger">Expirado</span>
+                            <% } %>
+                        </p>
+                    <% } %>
+                    <hr>
+                    <div class="d-grid">
+                        <a href="/publicacao-legal" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .content-text {
+        line-height: 1.6;
+        white-space: pre-wrap;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-blue);
+    }
+</style>
